@@ -1,48 +1,8 @@
 import "dotenv/config";
 import { createPublicClient, http, decodeEventLog, erc20Abi } from "viem";
 import { mainnet } from "viem/chains";
-
-const uniswapV2PoolAbi = [
-  {
-    type: "event",
-    name: "Swap",
-    inputs: [
-      { name: "sender", type: "address", indexed: true },
-      { name: "amount0In", type: "uint256", indexed: false },
-      { name: "amount1In", type: "uint256", indexed: false },
-      { name: "amount0Out", type: "uint256", indexed: false },
-      { name: "amount1Out", type: "uint256", indexed: false },
-      { name: "to", type: "address", indexed: true },
-    ],
-  },
-  {
-    type: "event",
-    name: "Sync",
-    inputs: [
-      { name: "reserve0", type: "uint112", indexed: false },
-      { name: "reserve1", type: "uint112", indexed: false },
-    ],
-  },
-];
-
-const wethAbi = [
-  {
-    type: "event",
-    name: "Withdrawal",
-    inputs: [
-      { name: "src", type: "address", indexed: true },
-      { name: "wad", type: "uint256", indexed: false },
-    ],
-  },
-  {
-    type: "event",
-    name: "Deposit",
-    inputs: [
-      { name: "dst", type: "address", indexed: true },
-      { name: "wad", type: "uint256", indexed: false },
-    ],
-  },
-];
+import { uniswapV2PoolAbi } from "./src/abis/uniswapV2.js";
+import { wethAbi } from "./src/abis/weth.js";
 
 const client = createPublicClient({
   chain: mainnet,
