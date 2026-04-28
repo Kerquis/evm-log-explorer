@@ -1,15 +1,8 @@
 import "dotenv/config";
-import { createPublicClient, http, decodeEventLog, erc20Abi } from "viem";
+import { createPublicClient, http } from "viem";
 import { mainnet } from "viem/chains";
 
-import { uniswapV2PoolAbi } from "./src/abis/uniswapV2.js";
-import { wethAbi } from "./src/abis/weth.js";
-
-const allEventsAbi = [
-  ...erc20Abi.filter((item) => item.type === "event"),
-  ...uniswapV2PoolAbi,
-  ...wethAbi,
-];
+import { decodeLog } from "./src/decoder.js";
 
 const client = createPublicClient({
   chain: mainnet,
@@ -35,17 +28,12 @@ const receipt = await client.getTransactionReceipt({
 receipt.logs.forEach((log, i) => {
   console.log(`--- Log ${i} ---`);
   console.log(`Emitter: ${log.address}`);
-
-  try {
-    const decoded = decodeEventLog({
-      abi: allEventsAbi,
-      data: log.data,
-      topics: log.topics,
-    });
-    console.log("Event:", decoded.eventName);
-    console.log("Args:", decoded.args);
-  } catch {
-    console.log(`Topic[0]: ${log.topics[0]} (cannot decode)`);
+  const result = decodeLog(log);
+  if (result.success) {
+    console.log("Event:", result.eventName);
+    console.log("Args:", result.args);
+  } else {
+    console.log(`Unknown event, topic[0]: ${result.topic0}`);
   }
   console.log();
 });
