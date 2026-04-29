@@ -25,10 +25,14 @@ const receipt = await client.getTransactionReceipt({
   hash: txHash,
 });
 
-receipt.logs.forEach((log, i) => {
+for (const [i, log] of receipt.logs.entries()) {
   console.log(`--- Log ${i} ---`);
-  console.log(`Emitter: ${log.address}`);
-  const result = decodeLog(log);
+
+  const result = await decodeLog(log, client);
+
+  const symbolPart = result.symbol ? ` (${result.symbol})` : "";
+  console.log(`Emitter: ${log.address}${symbolPart}`);
+
   if (result.success) {
     console.log("Event:", result.eventName);
     console.log("Args:", result.args);
@@ -36,4 +40,4 @@ receipt.logs.forEach((log, i) => {
     console.log(`Unknown event, topic[0]: ${result.topic0}`);
   }
   console.log();
-});
+}
