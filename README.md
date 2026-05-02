@@ -31,7 +31,7 @@ It also goes beyond what most decoders show. For Uniswap V2 swaps, it computes b
 ### Installation
 
 ```bash
-git clone https://github.com/Kerquis/evm-log-explorer.git
+git clone https://github.com/Frodrinos/evm-log-explorer.git
 cd evm-log-explorer
 npm install
 ```
@@ -91,7 +91,7 @@ The difference between spot price and execution price gives you the actual slipp
 
 ## Project structure
 
-\`\`\`
+```
 evm-log-explorer/
 ├── main.js # Entry point - handles CLI args, fetches receipt, formats output
 ├── src/
@@ -102,7 +102,7 @@ evm-log-explorer/
 ├── .env.example # Template for environment variables
 ├── package.json
 └── README.md
-\`\`\`
+```
 
 The decoder is a pure function - it takes a log and a viem client, returns a structured result. The main file handles everything else: CLI parsing, fetching the receipt, deciding how to display each event type. Caching for token info and pool metadata is internal to the decoder module.
 
